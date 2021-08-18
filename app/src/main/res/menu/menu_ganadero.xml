@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/option_addganadero"
+        android:title="Agregar Ganadero"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_person_add_white"/>
+    <item android:id="@+id/option_refresh"
+        android:title="Actualizar"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_refresh2"/>
+</menu>

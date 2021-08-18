@@ -1,0 +1,238 @@
+<resources>
+    <string name="app_name">Ganadero SI</string>
+
+    <string name="lblLogin">Inicio de Sesión</string>
+    <string name="lblConfirmePin">Confirme Pin</string>
+    <string name="lblIngresePin">Ingrese Nuevo Pin</string>
+    <string name="lblBlancoLogin">   </string>
+    <string name="GPSAlertDialogTitle">Configuración GPS</string>
+    <string name="GPSAlertDialogMessage">Por favor active los servicios de Ubicación</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="dbUsuario">
+        CREATE TABLE IF NOT EXISTS usuario(
+            idusuario integer primary key,
+            razonsocial varchar(128),
+            usuario varchar(50),
+            clave varchar(128),
+            autorizacion integer,
+            pin varchar(4),
+            perfil integer,
+            sucursalid integer,
+            CONSTRAINT usuario_pin UNIQUE(idusuario,pin)
+        );
+        ALTER TABLE usuario ADD COLUMN parroquiaid integer DEFAULT 0;
+    </string>
+
+    <string name="dbSucursal">
+        CREATE TABLE IF NOT EXISTS sucursal(
+            idsucursal varchar(20) primary key,
+            ruc varchar(20),
+            razonsocial varchar(128),
+            nombrecomercial varchar(128),
+            nombresucursal varchar(128),
+            direccion varchar(128),
+            codigoestablecimiento varchar(3),
+            puntoemision varchar(3),
+            ambiente integer,
+            sucursalpadreid varchar(20),
+            idestablecimiento integer
+        );
+        ALTER TABLE sucursal ADD COLUMN idpuntoemision integer DEFAULT 0;
+    </string>
+    <string name="dbSecuencial">
+        CREATE TABLE IF NOT EXISTS secuencial (
+            sucursalid varchar(20),
+            tipocomprobante varchar(2),
+            codigoestablecimiento varchar(3),
+            puntoemision varchar(3),
+            secuencial integer,
+            constraint pksecuencial primary key (sucursalid, tipocomprobante, codigoestablecimiento, puntoemision)
+        );
+    </string>
+    <string name="dbPersona">
+        CREATE TABLE IF NOT EXISTS persona(
+            idpersona INTEGER PRIMARY KEY AUTOINCREMENT,
+            tiponip varchar(2),
+            nip varchar(20),
+            razonsocial varchar(200),
+            nombrecomercial varchar(200),
+            direccion text,
+            lat double,
+            lon double,
+            categoria varchar(1),
+            usuarioid integer,
+            fono1 varchar(20),
+            fono2 varchar(20),
+            email varchar(100),
+            observacion text,
+            ruc varchar(20),
+            codigosistema integer,
+            actualizado integer,
+            establecimientoid INTEGER,
+            tipopersona varchar(5),
+            fechanacimiento varchar(20),
+            tipoproveedor varchar(2),
+            CONSTRAINT uknip UNIQUE(nip)
+        );
+    </string>
+    <string name="dbPermiso">
+        CREATE TABLE IF NOT EXISTS permiso(
+            nombreopcion VARCHAR(150),
+            perfilid INTEGER,
+            opcionid INTEGER,
+            permisoescritura VARCHAR(10),
+            permisoimpresion VARCHAR(10),
+            permisomodificacion VARCHAR(10),
+            permisoborrar VARCHAR(10),
+            permisosubirarchivo VARCHAR(10)
+        );
+    </string>
+
+    <string name="dbCatalogo">
+        CREATE TABLE IF NOT EXISTS catalogo(
+            idcatalogo integer,
+            codigocatalogo varchar(50),
+            nombrecatalogo varchar(150),
+            codigopadre varchar(50),
+            CONSTRAINT ukcatalogo UNIQUE(codigocatalogo, codigopadre)
+        );
+    </string>
+
+    <string name="dbFichaGanadero">
+        CREATE TABLE IF NOT EXISTS fichaganadero(
+            idfichaganadero integer primary key autoincrement,
+            codigosistema integer,
+            ganaderoid integer,
+            fecha_visita varchar(20),
+            acceso_internet varchar(1),
+            lugar_compra_insumos text,
+            motivo_compra varchar(10),
+            tipo_alimentos_animales text,
+            lugar_compra_productos_consumo text,
+            lugar_recibe_atención_medica text,
+            lugar_compra_medicina text,
+            monto_atencion_medica double,
+            vision_familia text,
+            miembros_familiares integer,
+            CONSTRAINT ukfichaganadero UNIQUE (ganaderoid, fecha_visita)
+        );
+        ALTER TABLE fichaganadero ADD COLUMN usuarioid INTEGER;
+    </string>
+
+    <string name="dbPropiedad">
+        CREATE TABLE IF NOT EXISTS propiedad(
+            idpropiedad integer PRIMARY KEY AUTOINCREMENT,
+            codigosistema integer,
+            nombrepropiedad varchar(150),
+            propietarioid integer,
+            administradorid integer,
+            fecha_adquisicion varchar(20),
+            area double,
+            caracteristicas_fisograficas text,
+            descripcion_usos_suelo text,
+            condiciones_accesibilidad text,
+            caminos_principales text,
+            caminos_secundarios text,
+            fuentes_agua text,
+            norte varchar(200),
+            sur varchar(200),
+            este varchar(200),
+            oeste varchar(200),
+            cobertura_forestal varchar(100),
+            razas_ganado varchar(100),
+            num_vacas_paridas integer default 0,
+            num_vacas_preñadas integer default 0,
+            num_vacas_solteras integer default 0,
+            num_terneros integer default 0,
+            num_toros integer default 0,
+            num_equinos integer default 0,
+            num_aves integer default 0,
+            num_cerdos integer default 0,
+            num_mascotas integer default 0,
+            otros varchar(200),
+            actualizado integer,
+            parroquiaid integer
+        );
+        ALTER TABLE propiedad ADD COLUMN usuarioid INTEGER;
+        ALTER TABLE propiedad ADD COLUMN nip_administrador varchar(20) default \'\';
+        ALTER TABLE propiedad ADD COLUMN direccion text default \'\';
+        ALTER TABLE propiedad ADD COLUMN lat DOUBLE DEFAULT 0;
+        ALTER TABLE propiedad ADD COLUMN lon DOUBLE DEFAULT 0;
+        ALTER TABLE propiedad ADD COLUMN nip_propietario varchar(20) default \'\';
+    </string>
+
+    <string name="dbUsoSuelo">
+        CREATE TABLE IF NOT EXISTS usosuelo(
+            idusosuelo integer primary key autoincrement,
+            propiedadid integer,
+            tipo_cultivo varchar(50),
+            area_cultivo double,
+            variedad_sembrada varchar(150),
+            observacion text,
+            CONSTRAINT ukusosuelo UNIQUE(propiedadid,tipo_cultivo, area_cultivo)
+        );
+        ALTER TABLE usosuelo ADD COLUMN orden INTEGER;
+    </string>
+
+    <string name="dbFODA_Propiedad">
+        CREATE TABLE IF NOT EXISTS fodapropiedad(
+            idfoda integer primary key autoincrement,
+            ganaderoid integer,
+            propiedadid integer,
+            tipo integer,
+            descripcion text,
+            causas text,
+            solucion_1 text,
+            solucion_2 text,
+            observacion text,
+            CONSTRAINT ukfoda UNIQUE (ganaderoid,propiedadid,tipo,descripcion)
+        );
+        ALTER TABLE fodapropiedad ADD COLUMN fichaganaderoid INTEGER;
+    </string>
+
+    <string name="dbProvincia">
+        CREATE TABLE IF NOT EXISTS provincia(
+            idprovincia integer,
+            nombreprovincia varchar(100),
+            CONSTRAINT ukprovincia UNIQUE(idprovincia)
+        );
+    </string>
+    <string name="dbCanton">
+        CREATE TABLE IF NOT EXISTS canton(
+            idcanton integer,
+            nombrecanton varchar(100),
+            provinciaid integer,
+            CONSTRAINT ukcanton UNIQUE(idcanton)
+        );
+    </string>
+    <string name="dbParroquia">
+        CREATE TABLE IF NOT EXISTS parroquia(
+            idparroquia integer,
+            nombreparroquia varchar(100),
+            cantonid integer,
+            CONSTRAINT ukparroquia UNIQUE(idparroquia)
+        );
+    </string>
+
+    <string name="dbFotos">
+        CREATE TABLE IF NOT EXISTS foto(
+            idfoto integer primary key autoincrement,
+            ganaderoid integer,
+            propiedadid integer,
+            name text,
+            path text,
+            CONSTRAINT ukfoto UNIQUE (ganaderoid,propiedadid,name)
+        );
+    </string>
+    <string name="dbConfig">
+        CREATE TABLE IF NOT EXISTS configuracion(
+            idconfiguracion INTEGER PRIMARY KEY AUTOINCREMENT,
+            urlbase VARCHAR(250),
+            maxfotoganadero INTEGER,
+            maxfotopropiedad INTEGER
+        );
+        ALTER TABLE configuracion ADD COLUMN ssl INTEGER DEFAULT 0;
+    </string>
+</resources>
